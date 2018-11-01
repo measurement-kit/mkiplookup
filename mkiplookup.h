@@ -18,14 +18,14 @@ typedef struct mkiplookup_request mkiplookup_request_t;
 typedef struct mkiplookup_response mkiplookup_response_t;
 
 /// mkiplookup_request_new_nonnull creates a new mkiplookup_request_t. This
-/// function calls std::abort if the allocation fails, hence it always
+/// function calls abort if the allocation fails, hence it always
 /// returns a valid pointer.
 mkiplookup_request_t *mkiplookup_request_new_nonnull(void);
 
 /// mkiplookup_request_set_timeout sets the timeout. After the timeout
 /// has elapsed, if a response is not received, the request will fail
 /// and an error is returned by mkiplookup_request_perform_nonnull. This
-/// function calls std::abort if passed null arguments.
+/// function calls abort if passed null arguments.
 void mkiplookup_request_set_timeout(
     mkiplookup_request_t *request,
     int64_t timeout);
@@ -37,7 +37,7 @@ void mkiplookup_request_set_ca_bundle_path(
     const char *ca_bundle_path);
 
 /// mkiplookup_request_perform_nonnull performs a lookup with @p request. This
-/// function will never return a null pointer. This function calls std::abort
+/// function will never return a null pointer. This function calls abort
 /// if you pass a null @p request.
 mkiplookup_response_t *mkiplookup_request_perform_nonnull(
     const mkiplookup_request_t *request);
@@ -47,26 +47,26 @@ void mkiplookup_request_delete(mkiplookup_request_t *request);
 
 /// mkiplookup_response_good returns true if no error occurred
 /// and false otherwise. Check the logs in such case. Note that this
-/// function calls std::abort if passsed a null @p response.
+/// function calls abort if passsed a null @p response.
 int64_t mkiplookup_response_good(const mkiplookup_response_t *response);
 
 /// mkiplookup_response_get_bytes_sent returns the bytes sent. This
-/// function calls std::abort if passed a null pointer.
+/// function calls abort if passed a null pointer.
 double mkiplookup_response_get_bytes_sent(
     const mkiplookup_response_t *response);
 
 /// mkiplookup_response_get_bytes_recv returns the bytes received. This
-/// function calls std::abort if passed a null pointer.
+/// function calls abort if passed a null pointer.
 double mkiplookup_response_get_bytes_recv(
     const mkiplookup_response_t *response);
 
 /// mkiplookup_response_get_probe_ip returns the probe IP. If the lookup
-/// failed, returns an empty string. Calls std::abort if @p response is null.
+/// failed, returns an empty string. Calls abort if @p response is null.
 const char *mkiplookup_response_get_probe_ip(
     const mkiplookup_response_t *response);
 
 /// mkiplookup_response_get_logs_binary returns the (possibly non UTF-8)
-/// logs. Calls std::abort if passed any null pointer.
+/// logs. Calls abort if passed any null pointer.
 void mkiplookup_response_get_logs_binary(
     const mkiplookup_response_t *response,
     const uint8_t **base, size_t *count);
@@ -103,7 +103,7 @@ using mkiplookup_response_uptr = std::unique_ptr<
     mkiplookup_response_t, mkiplookup_response_deleter>;
 
 /// mkiplookup_response_moveout_logs moves logs out of @p response and
-/// returns them. Beware that they may contain binary data. Calls std::abort
+/// returns them. Beware that they may contain binary data. Calls abort
 /// if @p response is a null pointer.
 std::string mkiplookup_response_moveout_logs(
     mkiplookup_response_uptr &response);
@@ -130,7 +130,7 @@ static const char *mkiplookup_ubuntu_get_url() {
 static int64_t
 mkiplookup_ubuntu_parse(std::string &&body, std::string *probe_ip) {
   if (probe_ip == nullptr) {
-    std::abort();
+    abort();
   }
   *probe_ip = "";  // reset
   {
@@ -175,7 +175,7 @@ void mkiplookup_request_set_timeout(
     mkiplookup_request_t *request,
     int64_t timeout) {
   if (request == nullptr) {
-    std::abort();
+    abort();
   }
   request->timeout = timeout;
 }
@@ -184,7 +184,7 @@ void mkiplookup_request_set_ca_bundle_path(
     mkiplookup_request_t *request,
     const char *ca_bundle_path) {
   if (request == nullptr || ca_bundle_path == nullptr) {
-    std::abort();
+    abort();
   }
   request->ca_bundle_path = ca_bundle_path;
 }
@@ -206,7 +206,7 @@ struct mkiplookup_response {
 mkiplookup_response_t *mkiplookup_request_perform_nonnull(
     const mkiplookup_request_t *request) {
   if (request == nullptr) {
-    std::abort();
+    abort();
   }
   mkcurl_request_uptr r{mkcurl_request_new_nonnull()};
   mkcurl_request_set_timeout_v2(r.get(), request->timeout);
@@ -245,7 +245,7 @@ void mkiplookup_request_delete(mkiplookup_request_t *request) {
 
 int64_t mkiplookup_response_good(const mkiplookup_response_t *response) {
   if (response == nullptr) {
-    std::abort();
+    abort();
   }
   return response->good;
 }
@@ -253,7 +253,7 @@ int64_t mkiplookup_response_good(const mkiplookup_response_t *response) {
 double mkiplookup_response_get_bytes_sent(
     const mkiplookup_response_t *response) {
   if (response == nullptr) {
-    std::abort();
+    abort();
   }
   return response->bytes_sent;
 }
@@ -261,7 +261,7 @@ double mkiplookup_response_get_bytes_sent(
 double mkiplookup_response_get_bytes_recv(
     const mkiplookup_response_t *response) {
   if (response == nullptr) {
-    std::abort();
+    abort();
   }
   return response->bytes_recv;
 }
@@ -269,7 +269,7 @@ double mkiplookup_response_get_bytes_recv(
 const char *mkiplookup_response_get_probe_ip(
     const mkiplookup_response_t *response) {
   if (response == nullptr) {
-    std::abort();
+    abort();
   }
   return response->probe_ip.c_str();
 }
@@ -278,7 +278,7 @@ void mkiplookup_response_get_logs_binary(
     const mkiplookup_response_t *response,
     const uint8_t **base, size_t *count) {
   if (response == nullptr || base == nullptr || count == nullptr) {
-    std::abort();
+    abort();
   }
   *base = (const uint8_t *)response->logs.c_str();
   *count = response->logs.size();
@@ -291,7 +291,7 @@ void mkiplookup_response_delete(mkiplookup_response_t *response) {
 std::string mkiplookup_response_moveout_logs(
     mkiplookup_response_uptr &response) {
   if (response == nullptr) {
-    std::abort();
+    abort();
   }
   return std::move(response->logs);
 }
