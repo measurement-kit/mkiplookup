@@ -235,7 +235,6 @@ mkiplookup_response_t *mkiplookup_request_perform_nonnull(
     return response.release();
   }
   response->good = true;
-  response->logs += "All good.\n";
   return response.release();
 }
 
