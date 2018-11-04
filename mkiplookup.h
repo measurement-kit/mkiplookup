@@ -256,8 +256,8 @@ mkiplookup_response_t *mkiplookup_request_perform_nonnull(
     hints.ai_flags |= AI_NUMERICHOST | AI_NUMERICSERV;
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
-    std::unique_ptr<addrinfo *, mkiplookup_ainfop_deleter> r{new addrinfo *{}};
-    int rv = ::getaddrinfo(maybe_probe_ip.c_str(), "443", &hints, r.get());
+    std::unique_ptr<addrinfo *, mkiplookup_ainfop_deleter> ap{new addrinfo *{}};
+    int rv = ::getaddrinfo(maybe_probe_ip.c_str(), "443", &hints, ap.get());
     if (rv != 0) {
       response->logs += "Not a valid IP address: ";
       response->logs += gai_strerror(rv);
