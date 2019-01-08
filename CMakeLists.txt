@@ -48,9 +48,6 @@ list(APPEND MKIPLOOKUP_LIBS Threads::Threads)
 link_libraries("${MKIPLOOKUP_LIBS}")
 
 add_library(mkiplookup mkiplookup.cpp)
-
-add_executable(unit-tests unit-tests.cpp)
-
 add_executable(mkiplookup-client mkiplookup-client.cpp)
 target_link_libraries(mkiplookup-client mkiplookup)
 
@@ -59,6 +56,7 @@ target_link_libraries(mkiplookup-client mkiplookup)
 
 set(BUILD_TESTING "ON" CACHE BOOL "Whether to build tests")
 if(${BUILD_TESTING})
+  add_executable(unit-tests unit-tests.cpp)
   enable_testing()
   add_test(NAME basic_test COMMAND mkiplookup-client)
 endif()
