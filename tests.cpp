@@ -101,3 +101,24 @@ TEST_CASE("mk::iplookup::perform handles network error correctly") {
     REQUIRE(!response.good);
   });
 }
+
+TEST_CASE("mk::iplookup::perform handles HTTP error correctly") {
+  MKMOCK_WITH_ENABLED_HOOK(mkcurl_response_status_code, 500, {
+    mk::iplookup::Response response = mk::iplookup::perform({});
+    REQUIRE(!response.good);
+  });
+}
+
+TEST_CASE("mk::iplookup::perform handles IP address extraction failure") {
+  MKMOCK_WITH_ENABLED_HOOK(ubuntu_extract_result, false, {
+    mk::iplookup::Response response = mk::iplookup::perform({});
+    REQUIRE(!response.good);
+  });
+}
+
+TEST_CASE("mk::iplookup::perform handles getaddrinfo failure") {
+  MKMOCK_WITH_ENABLED_HOOK(getaddrinfo_retval, EAI_FAIL, {
+    mk::iplookup::Response response = mk::iplookup::perform({});
+    REQUIRE(!response.good);
+  });
+}
