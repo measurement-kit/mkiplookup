@@ -25,8 +25,8 @@
 /geolite2-country.tar.gz
 /install_manifest.txt
 /libmkiplookup.a
-/mkcurl.h
-/mkdata.h
+/mkcurl.hpp
+/mkdata.hpp
 /mkiplookup-client
 /mkiplookup-client.dir/
 /mkiplookup-client.vcxproj
