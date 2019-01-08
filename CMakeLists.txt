@@ -10,6 +10,7 @@ include(MkUtils)
 MkDownloadCatchorgCatch2()
 MkDownloadMeasurementKitMkData()
 MkDownloadMeasurementKitMkCurl()
+MkDownloadMeasurementKitMkMock()
 MkDownloadCABundle()
 
 if("${MSVC}")
