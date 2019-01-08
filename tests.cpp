@@ -1,6 +1,17 @@
 #define MKCURL_INLINE_IMPL
+#include "mkcurl.hpp"
 #define MKDATA_INLINE_IMPL
-#define MKIPLOOKUP_INLINE_IMPL
+#include "mkdata.hpp"
+
+#include "mkmock.hpp"
+
+MKMOCK_DEFINE_HOOK(mkcurl_response_error, int64_t);
+MKMOCK_DEFINE_HOOK(mkcurl_response_status_code, int64_t);
+MKMOCK_DEFINE_HOOK(ubuntu_extract_result, bool);
+MKMOCK_DEFINE_HOOK(getaddrinfo_retval, int);
+
+#define MKIPLOOKUP_INLINE_IMPL  // include implementation inline
+#define MKIPLOOKUP_MOCK         // enable mocking
 #include "mkiplookup.hpp"
 
 #define CATCH_CONFIG_MAIN
@@ -82,4 +93,11 @@ TEST_CASE("mk::iplookup::ubuntu_extract works") {
     REQUIRE(mk::iplookup::ubuntu_extract(std::move(body), ip));
     REQUIRE(ip == "2A00:1450:40FF:802::200");
   }
+}
+
+TEST_CASE("mk::iplookup::perform handles network error correctly") {
+  MKMOCK_WITH_ENABLED_HOOK(mkcurl_response_error, CURL_LAST, {
+    mk::iplookup::Response response = mk::iplookup::perform({});
+    REQUIRE(!response.good);
+  });
 }

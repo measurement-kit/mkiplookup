@@ -56,7 +56,7 @@ target_link_libraries(mkiplookup-client mkiplookup)
 
 set(BUILD_TESTING "ON" CACHE BOOL "Whether to build tests")
 if(${BUILD_TESTING})
-  add_executable(unit-tests unit-tests.cpp)
+  add_executable(tests tests.cpp)
   enable_testing()
   add_test(NAME basic_test COMMAND mkiplookup-client)
 endif()

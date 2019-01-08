@@ -32,6 +32,8 @@
 /mkiplookup-client.vcxproj
 /mkiplookup-client.vcxproj.filters
 /mkiplookup.sln
+/mkmock.hpp
+/tests
 /windows-curl-*.tar.gz
 /windows-libmaxminddb-*.tar.gz
 /x64/

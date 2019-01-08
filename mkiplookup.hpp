@@ -65,6 +65,16 @@ Response perform(const Request &request) noexcept;
 
 #include "mkdata.hpp"
 #include "mkcurl.hpp"
+#include "mkmock.hpp"
+
+// MKIPLOOKUP_MOCK allows to enable mocking
+#ifdef MKIPLOOKUP_MOCK
+#define MKIPLOOKUP_HOOK MKMOCK_HOOK_ENABLED
+#define MKIPLOOKUP_HOOK_ALLOC MKMOCK_HOOK_ALLOC_ENABLED
+#else
+#define MKIPLOOKUP_HOOK MKMOCK_HOOK_DISABLED
+#define MKIPLOOKUP_HOOK_ALLOC MKMOCK_HOOK_ALLOC_DISABLED
+#endif
 
 namespace mk {
 namespace iplookup {
@@ -131,10 +141,12 @@ Response perform(const Request &request) noexcept {
   for (auto &log : re.logs) {
     response.logs.push_back(std::move(log.line));
   }
+  MKIPLOOKUP_HOOK(mkcurl_response_error, re.error);
   if (re.error != 0) {
     response.logs.push_back("We could not communicate with server.");
     return response;
   }
+  MKIPLOOKUP_HOOK(mkcurl_response_status_code, re.status_code);
   if (re.status_code != 200) {
     response.logs.push_back("Status code indicates failure.");
     return response;
@@ -143,7 +155,9 @@ Response perform(const Request &request) noexcept {
   response.logs.push_back(re.body);  // makes a copy
   response.logs.push_back("=== END RECEIVED BODY ===");
   std::string maybe_probe_ip;
-  if (!ubuntu_extract(std::move(re.body), maybe_probe_ip)) {
+  bool matches = ubuntu_extract(std::move(re.body), maybe_probe_ip);
+  MKIPLOOKUP_HOOK(ubuntu_extract_result, matches);
+  if (!matches) {
     response.logs.push_back("Cannot extract IP from response body.");
     return response;
   }
@@ -156,6 +170,7 @@ Response perform(const Request &request) noexcept {
     std::unique_ptr<addrinfo *, ainfop_deleter> ap{new addrinfo *{}};
     // Note that _any_ port would do in this context.
     int rv = getaddrinfo(maybe_probe_ip.c_str(), "443", &hints, ap.get());
+    MKIPLOOKUP_HOOK(getaddrinfo_retval, rv);
     if (rv != 0) {
       std::stringstream ss;
       ss << "Not a valid IP address: ";
