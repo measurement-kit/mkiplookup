@@ -59,6 +59,7 @@ Response perform(const Request &request) noexcept;
 #include <netdb.h>
 #endif
 
+#include <algorithm>
 #include <memory>
 #include <sstream>
 
@@ -135,7 +136,7 @@ Response perform(const Request &request) noexcept {
     return response;
   }
   if (re.status_code != 200) {
-    response.logs.push_back("Status code indicate failure.");
+    response.logs.push_back("Status code indicates failure.");
     return response;
   }
   response.logs.push_back("=== BEGIN RECEIVED BODY ===");
