@@ -59,6 +59,7 @@ Response perform(const Request &request) noexcept;
 #include <netdb.h>
 #endif
 
+#include <memory>
 #include <sstream>
 
 #include "mkdata.hpp"
