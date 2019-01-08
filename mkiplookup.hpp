@@ -12,7 +12,7 @@
 namespace mk {
 namespace iplookup {
 
-/// Request is a IPLookup request.
+/// Request is a IP lookup request.
 struct Request {
   /// ca_bundle_path is the path of the CA bundle to use.
   std::string ca_bundle_path;
@@ -21,7 +21,7 @@ struct Request {
   int64_t timeout = 30;
 };
 
-/// Response is a IPLookup response.
+/// Response is a IP lookup response.
 struct Response {
   /// good indicates whether we succeeded.
   bool good = false;
@@ -39,7 +39,7 @@ struct Response {
   int64_t bytes_recv = 0;
 };
 
-/// perform performs an IPLookup using @p request settings.
+/// perform performs an IP lookup using @p request settings.
 Response perform(const Request &request) noexcept;
 
 }  // namespace iplookup
@@ -67,7 +67,7 @@ Response perform(const Request &request) noexcept;
 namespace mk {
 namespace iplookup {
 
-// ubuntu_get_url returns the URL to perform a IPLookup using
+// ubuntu_get_url returns the URL to perform a IP lookup using
 // the GeoIP services provided by Ubuntu.
 static const char *ubuntu_get_url() noexcept {
   return "https://geoip.ubuntu.com/lookup";
