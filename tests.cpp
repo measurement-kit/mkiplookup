@@ -62,6 +62,11 @@ TEST_CASE("mk::iplookup::ubuntu_extract works") {
     REQUIRE(ip == "");
   }
 
+  SECTION("With input contains some invalid chars") {
+    std::string body = "<xml><Ip>1.1.1@1</Ip></xml>";
+    REQUIRE(!mk::iplookup::ubuntu_extract(std::move(body), ip));
+  }
+
   SECTION("With something that matches our basic input filter") {
     // Note: the extraction should also extract stuff that is not a valid
     // IP address but is still compliant to our checks
