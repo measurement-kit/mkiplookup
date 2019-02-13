@@ -1,0 +1,28 @@
+name: mkiplookup
+
+docker: bassosimone/mk-debian
+
+dependencies:
+- curl.haxx.se/ca
+- github.com/catchorg/catch2
+- github.com/curl/curl
+- github.com/measurement-kit/mkcurl
+- github.com/measurement-kit/mkdata
+- github.com/measurement-kit/mkmock
+
+targets:
+  libraries:
+    mkiplookup:
+      compile: [mkiplookup.cpp]
+  executables:
+    tests:
+      compile: [tests.cpp]
+    mkiplookup-client:
+      compile: [mkiplookup-client.cpp]
+      link: [mkiplookup]
+
+tests:
+  mocked_tests:
+    command: tests
+  integration_tests:
+    command: mkiplookup-client

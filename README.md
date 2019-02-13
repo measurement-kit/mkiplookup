@@ -5,3 +5,28 @@
 IP lookup library for Measurement Kit. This is a basic building block whose
 main use case is being vendored inside Measurement Kit. As such, we don't
 aim for a stable API here, and we'll never release `v1.0.0`.
+
+## Regenerating build files
+
+Possibly edit `MKBuild.yaml`, then run:
+
+```
+go get -v github.com/measurement-kit/mkbuild
+mkbuild
+```
+
+## Building
+
+```
+mkdir build
+cd build
+cmake -GNinja ..
+cmake --build .
+ctest -a -j8 --output-on-failure
+```
+
+## Testing with docker
+
+```
+./docker.sh <build-type>
+```
